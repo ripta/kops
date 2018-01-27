@@ -190,7 +190,14 @@ func (b *KubeletBuilder) buildSystemdService() *nodetasks.Service {
 	}
 
 	manifest.Set("Service", "EnvironmentFile", "/etc/sysconfig/kubelet")
-	manifest.Set("Service", "ExecStart", kubeletCommand+" \"$DAEMON_ARGS\"")
+	if b.Cluster.Spec.Networking != nil && b.Cluster.Spec.Networking.AmazonVPC != nil {
+		if b.Distribution == distros.DistributionCoreOS {
+			manifest.Set("Service", "EnvironmentFile", "/etc/environment")
+			manifest.Set("Service", "ExecStart", kubeletCommand+" \"$DAEMON_ARGS\" \"--node-ip=${COREOS_PRIVATE_IPV4}\"")
+		}
+	} else {
+		manifest.Set("Service", "ExecStart", kubeletCommand+" \"$DAEMON_ARGS\"")
+	}
 	manifest.Set("Service", "Restart", "always")
 	manifest.Set("Service", "RestartSec", "2s")
 	manifest.Set("Service", "StartLimitInterval", "0")
