@@ -212,6 +212,8 @@ type KubeAPIServerConfig struct {
 	Address string `json:"address,omitempty" flag:"address"`
 	// AdmissionControl is a list of admission controllers to user
 	AdmissionControl []string `json:"admissionControl,omitempty" flag:"admission-control"`
+	// AdmissionControlConfigFile is the full path to the admission configuration
+	AdmissionControlConfigFile string `json:"admissionControlConfigFile,omitempty" flag:"admission-control-config-file"`
 	// ServiceClusterIPRange is the service address range
 	ServiceClusterIPRange string `json:"serviceClusterIPRange,omitempty" flag:"service-cluster-ip-range"`
 	// Passed as --service-node-port-range to kube-apiserver. Expects 'startPort-endPort' format. Eg. 30000-33000
